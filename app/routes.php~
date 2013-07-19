@@ -11,13 +11,14 @@
 |
 */
 
+/*
 Route::get('/', function()
 {
         $title = "Hemsidan";
 	return View::make('hello')
 	->with('title', $title);
 });
-
+*/
 Route::get('/', array('before' => 'auth' ,function()
 {
     $title = "Hemsidan - inloggad";
@@ -71,9 +72,82 @@ $creditlines2 = DB::table('creditlines')
 ->join('users', 'cl2.to', '=', 'users.id')
 ->join('goods', 'cl2.good_id', '=', 'goods.id')
 ->where('creditlines.from', Auth::user()->id)
-->select(DB::raw('*, MIN(LEAST( creditlines.amount, cl2.amount)) as myleast, cl2.from as viaid, creditlines.amount as viaamount'))
+->where('users.id', "!=", Auth::user()->id)
+->select(DB::raw('*, LEAST( creditlines.trust - creditlines.balance, cl2.trust - cl2.balance) as myleast, cl2.from as viaid, creditlines.trust - creditlines.balance as viaamount'))
 ->get();
 
 
     return View::make('creditlines')->with('creditlines', $creditlines)->with('creditlines2', $creditlines2);
 });
+
+
+Route::get('trust/{id?}/unit/{unit?}/amount/{amount?}', array('before' => 'auth' ,function($id = null, $unit = null, $amount = null)
+{
+	$trust = array('from' => $id, 'unit' => $unit, 'amount' => $amount);
+	$trustunitname = Good::where('id', $trust['unit'])->select('description')->get()->first()->description;
+	$trustname = User::where('id', $trust['from'])->select('name')->get()->first()->name;
+	return View::make('trust')->with('trust', $trust)->with('trustunitname', $trustunitname)->with('trustname', $trustname);
+}));
+
+
+Route::post('vtrust', array('before' => 'auth' ,function(){
+     $userdata = array(
+'amount' => Input::get('amount'),
+'unit' => Input::get('unit'),
+'from' => Input::get('from')
+);
+
+if ($userdata['from'] == Auth::user()->id){
+return "ej tillåtet";
+}
+
+
+$exists = Creditline::where('from', $userdata['from'])->where('to', Auth::user()->id)->where('good_id', $userdata['unit'])->select('id')->get()->first();
+
+if ($exists)
+$updated = Creditline::where('id', $exists['id'])->update(array(
+		'from' => $userdata['from'],
+		'to' => Auth::user()->id,
+		'trust' => $userdata['amount'], 
+		'good_id' => $userdata['unit']
+));
+else
+$response = DB::table('creditlines')->insertGetId(
+    array(
+	'from' => $userdata['from'],
+	'to' => Auth::user()->id,
+	'trust' => $userdata['amount'], 
+	'good_id' => $userdata['unit']
+));
+
+// we are now logged in, update database
+return Redirect::to('/');
+}));
+
+
+
+Route::get('user/id/{id?}', function($id = null)
+{
+	$user = User::where('id', $id)->get()->first();
+	$email = true;
+	if ($user){
+		
+		return View::make('user')->with('user', $user)->with('email', $email);
+	}
+	else
+	return "hittade ej";
+});
+
+
+Route::get('user/email/{email?}', function($email = 'null')
+{
+	$user = User::where('email', $email)->get()->first();
+	$email = true;
+	if ($user){
+		
+		return View::make('user')->with('user', $user)->with('email', $email);
+	}
+	else
+	return "hittade ej";
+});
+

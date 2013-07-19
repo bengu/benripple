@@ -15,5 +15,10 @@ class GoodTableSeeder extends Seeder {
             'description' => 'DKK',
 
         ));
+
+	DB::table('goods')->insert(array(
+            'description' => '(Timmar)',
+
+        ));
     }
 }

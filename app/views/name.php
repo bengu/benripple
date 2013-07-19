@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <?php echo $title; ?>
     <style>
         @import url(//fonts.googleapis.com/css?family=Lato:300,400,700);
 
@@ -14,13 +13,13 @@
         }
 
         .welcome {
-           width: 300px;
-           height: 300px;
+           width: 400px;
+           height: 400px;
            position: absolute;
            left: 50%;
            top: 50%; 
-           margin-left: -150px;
-           margin-top: -150px;
+           margin-left: -200px;
+           margin-top: -200px;
         }
 
         a, a:visited {
@@ -45,15 +44,13 @@
 </head>
 <body>
 <div class="header">
-Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
-<?php echo HTML::link('logout', 'Logout'); ?><br />
-<?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
-<?php echo HTML::link('/trust/1/unit/1/amount/100', '/trust/1/unit/1/amount/100'); ?>
-<?php echo HTML::link('/trust/2/unit/1/amount/100', '/trust/2/unit/1/amount/100'); ?>
-
+<?php echo Auth::user()->username; ?> är inloggad.<br />
+<?php echo HTML::link('logout', 'Logout'); ?>
 
 </div>
     <div class="welcome">
+<?php echo var_dump($name); ?>
+
     </div>
 </body>
 </html>

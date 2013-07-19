@@ -7,12 +7,17 @@ class GoodTableSeeder extends Seeder {
         DB::table('goods')->delete();
 
         DB::table('goods')->insert(array(
-            'description' => 'Svenska kronor',
+            'description' => 'SEK',
 
         ));
 
 	DB::table('goods')->insert(array(
-            'description' => 'Danska kronor',
+            'description' => 'DKK',
+
+        ));
+
+	DB::table('goods')->insert(array(
+            'description' => 'Timmar',
 
         ));
     }

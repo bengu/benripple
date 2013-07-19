@@ -51,7 +51,6 @@ Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
 
 </div>
     <div class="welcome">
-        Hej!
     </div>
 </body>
 </html>

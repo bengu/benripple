@@ -17,7 +17,10 @@ class CreateCreditlinesTable extends Migration {
 			$table->increments('id');
 			$table->integer('from');
 			$table->integer('to');
-			$table->integer('amount');
+			$table->integer('balance');
+			$table->integer('trust');
+			$table->boolean('private');
+			$table->boolean('dividend');			
 			$table->integer('good_id');
         		$table->timestamps();
 			//$table->foreign('good_id')->references('id')->on('goods');
