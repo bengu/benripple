@@ -60,20 +60,35 @@ return Redirect::to('/');
 Route::get('creditlines', function()
 {
     $creditlines = DB::table('creditlines')
+->leftJoin('creditlines as dl', function($join){
+                             $join->on('creditlines.from', '=', 'dl.to');
+                             $join->on('creditlines.to', '=', 'dl.from');
+})
 ->join('users', 'creditlines.to', '=', 'users.id')
 ->join('goods', 'creditlines.good_id', '=', 'goods.id')
-->where('from', Auth::user()->id)->get();
+->where('creditlines.from', Auth::user()->id)
+->select(DB::raw('*, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as damoney'))
+->get();
 
 $creditlines2 = DB::table('creditlines')
+
 ->join('creditlines as cl2', function($join){
                              $join->on('creditlines.good_id', '=', 'cl2.good_id');
                              $join->on('creditlines.to', '=', 'cl2.from');
+})
+->leftJoin('creditlines as dl', function($join){
+                             $join->on('creditlines.from', '=', 'dl.to');
+                             $join->on('creditlines.to', '=', 'dl.from');
+})
+->leftJoin('creditlines as dl2', function($join){
+                             $join->on('cl2.from', '=', 'dl2.to');
+                             $join->on('cl2.to', '=', 'dl2.from');
 })
 ->join('users', 'cl2.to', '=', 'users.id')
 ->join('goods', 'cl2.good_id', '=', 'goods.id')
 ->where('creditlines.from', Auth::user()->id)
 ->where('users.id', "!=", Auth::user()->id)
-->select(DB::raw('*, LEAST( creditlines.trust - creditlines.balance, cl2.trust - cl2.balance) as myleast, cl2.from as viaid, creditlines.trust - creditlines.balance as viaamount'))
+->select(DB::raw('*, LEAST( COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance, COALESCE(dl2.balance,0) + cl2.trust - cl2.balance) as myleast, cl2.from as viaid, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as viaamount'))
 ->get();
 
 

@@ -63,8 +63,10 @@ echo 'Du kan utfärda till de som litar på valutan<br /><br />';}
 
 foreach ($creditlines as $cl)
 {
-	if($cl->privatperson) 
-	echo "<b>", $cl->trust - $cl->balance, " ", $cl->description, "</b> till ", $cl->name, " <br />";
+	//if($cl->privatperson) 
+	if($cl->damoney > 0)
+	echo "<b>", $cl->damoney, " ", $cl->description, "</b> till ", $cl->name, " <br />";
+	var_dump($cl);
 }?>
 
 
@@ -75,7 +77,8 @@ if($priv['privatperson']){
 	echo "<br /><br />Du kan också överföra <br /><br />"; 
 	foreach ($creditlines2 as $cl)
 	{
-	if($cl->myleast)
+//var_dump($cl);
+	if($cl->myleast > 0)
 		echo "<b>", $cl->myleast, " ", $cl->description, "</b> till ", $cl->name, " via ",
 		DB::table('users')->where('id', '=', $cl->viaid)
 			->first()->name, " (", $cl->viaamount, " ", $cl->description, ")",
