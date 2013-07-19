@@ -1,0 +1,14 @@
+<?php
+
+class LineTableSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('lines')->delete();
+
+        DB::table('lines')->insert(array(
+            'from' => '1',
+            'to' => '2'
+        ));
+    }
+}
