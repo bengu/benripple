@@ -47,12 +47,16 @@
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
+<?php echo HTML::link('hello', 'Hem'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
+
 
 </div>
     <div class="welcome">		
 <?php
 echo $user['name'] . '<br /><br />';
 
+echo '<br /><br />' . $user['desc'];
 
 if($email == true) 
 echo 'E-postadressen ' . $user['email'] . ' tillhör ' . $user['name'] . '<br /><br />';
@@ -69,7 +73,7 @@ $exists = Creditline::join('goods', 'good_id', '=', 'goods.id')
 echo "Du har redan uppgett att du litar på användaren motsvarande ";
 foreach ($exists as $ex)
 	{
-		echo $ex['trust'], ' ', $ex['description'], ' ' ;
+		echo '<br />' . $ex['trust'], ' ', $ex['description'], ' ' ;
 	}
 ?>
     </div>

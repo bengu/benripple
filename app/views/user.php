@@ -47,12 +47,16 @@
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
+<?php echo HTML::link('hello', 'Hem'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
+
 
 </div>
     <div class="welcome">		
 <?php
 echo $user['name'] . '<br /><br />';
 
+echo $user['desc'] . '<br /><br />';
 
 if($email == true) 
 echo 'E-postadressen ' . $user['email'] . ' tillhör ' . $user['name'] . '<br /><br />';

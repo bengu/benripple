@@ -48,12 +48,26 @@
 Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
-<?php echo HTML::link('/trust/1/unit/1/amount/100', '/trust/1/unit/1/amount/100'); ?>
-<?php echo HTML::link('/trust/2/unit/1/amount/100', '/trust/2/unit/1/amount/100'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
 
 
 </div>
-    <div class="welcome">
-    </div>
+	<div class="welcome">
+		Lista på valutor i systemet <br />
+    		<?php 
+		$currencies = User::join('creditlines', 'users.id', '=', 'creditlines.from' )
+			->select(DB::raw('count(*) as creditline_count, name, users.id'))
+                     	->groupBy('users.id')			
+			->where('privatperson', '=', '0')
+			->orderBy('creditline_count', 'desc')
+			->get();
+		
+		foreach ($currencies as $c){
+			$cstringusersearch = '/user/id/' . $c['id'];
+			echo HTML::link($cstringusersearch, $c['name'] . ' (' . $c['creditline_count'] . ')'), '<br />';
+		}
+
+?>
+	</div>
 </body>
 </html>

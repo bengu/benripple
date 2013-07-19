@@ -18,7 +18,8 @@ class UserTableSeeder extends Seeder {
             'email' => 'ben@gmail.com',
             'password' => Hash::make('master'),
 	    'username' => 'Daxia2',
-	    'name' => 'Dalervalutan'
+	    'name' => 'Dalervalutan',
+	    'desc' => 'En valuta som administreras av skaparna till denna mjukvara. Låt er inte begränsas till denna, skapa egna valutor!'
         ));
 
 DB::table('users')->insert(array(

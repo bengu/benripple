@@ -46,6 +46,7 @@
 <div class="header">
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?>
+<?php echo HTML::link('hello', 'Hem'); ?>
 
 </div>
     <div class="welcome">

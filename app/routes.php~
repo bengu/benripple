@@ -26,6 +26,11 @@ Route::get('/', array('before' => 'auth' ,function()
 	->with('title', $title);
 }));
 
+Route::get('hello', function()
+{
+    return Redirect::to('/');
+});
+
 Route::get('login', function()
 {
     return View::make('login');
@@ -71,7 +76,7 @@ Route::get('creditlines', function()
 ->get();
 
 $creditlines2 = DB::table('creditlines')
-
+->join('users as users2', 'creditlines.to', '=', 'users2.id')
 ->join('creditlines as cl2', function($join){
                              $join->on('creditlines.good_id', '=', 'cl2.good_id');
                              $join->on('creditlines.to', '=', 'cl2.from');
@@ -88,7 +93,7 @@ $creditlines2 = DB::table('creditlines')
 ->join('goods', 'cl2.good_id', '=', 'goods.id')
 ->where('creditlines.from', Auth::user()->id)
 ->where('users.id', "!=", Auth::user()->id)
-->select(DB::raw('*, LEAST( COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance, COALESCE(dl2.balance,0) + cl2.trust - cl2.balance) as myleast, cl2.from as viaid, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as viaamount'))
+->select(DB::raw('*, LEAST( COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance, COALESCE(dl2.balance,0) + cl2.trust - cl2.balance) as myleast, users2.name as vianame, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as viaamount'))
 ->get();
 
 
@@ -141,6 +146,11 @@ return Redirect::to('/');
 
 
 
+Route::get('listusers', function()
+{
+return View::make('listusers');
+});
+
 Route::get('user/id/{id?}', function($id = null)
 {
 	$user = User::where('id', $id)->get()->first();
@@ -153,6 +163,17 @@ Route::get('user/id/{id?}', function($id = null)
 	return "hittade ej";
 });
 
+Route::post('user', function()
+{
+	$user = User::where('email', Input::get('email'))->get()->first();
+	$email = true;
+	if ($user){
+		
+		return Redirect::to('/user/email/' . $email);
+	}
+	else
+	return "hittade ej";
+});
 
 Route::get('user/email/{email?}', function($email = 'null')
 {

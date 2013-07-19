@@ -46,10 +46,8 @@
 <div class="header">
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
-<?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
-<?php echo HTML::link('/trust/1/unit/1/amount/100', '/trust/1/unit/1/amount/100'); ?>
-<?php echo HTML::link('/trust/2/unit/1/amount/100', '/trust/2/unit/1/amount/100'); ?>
-
+<?php echo HTML::link('hello', 'Hem'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
 </div>
     <div class="welcome">
 <?php
@@ -63,8 +61,7 @@ echo 'Du kan utfärda till de som litar på valutan<br /><br />';}
 
 foreach ($creditlines as $cl)
 {
-	//if($cl->privatperson) 
-	if($cl->damoney > 0)
+	if($cl->damoney > 0 && $cl->privatperson)
 	echo "<b>", $cl->damoney, " ", $cl->description, "</b> till ", $cl->name, " <br />";
 	//var_dump($cl);
 }?>
@@ -80,8 +77,7 @@ if($priv['privatperson']){
 //var_dump($cl);
 	if($cl->myleast > 0)
 		echo "<b>", $cl->myleast, " ", $cl->description, "</b> till ", $cl->name, " via ",
-		DB::table('users')->where('id', '=', $cl->viaid)
-			->first()->name, " (", $cl->viaamount, " ", $cl->description, ")",
+		$cl->vianame, " (", $cl->viaamount, " ", $cl->description, ")",
 		"<br />";
 	}
 }

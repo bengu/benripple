@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <?php echo $title; ?>
     <style>
         @import url(//fonts.googleapis.com/css?family=Lato:300,400,700);
 
@@ -48,23 +47,33 @@
 Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
-<?php echo HTML::link('listusers', 'Lista användare'); ?>
+<?php echo HTML::link('hello', 'Hem'); ?>
 
 
 </div>
 	<div class="welcome">
-		Lista på valutor i systemet <br />
+
+<div class="container">
+ 
+
+
+<form class="form-signin form-horizontal" method="post" action="/user">
+<h2 class="">Sök användare med epostadress.</h2>
+<input type="text" id="email" name="email" value="">
+<br />
+<button class="btn btn-large btn-primary" type="submit">Sök med epostadress</button>
+</form>
+</div> <!-- /container -->
+<br /><br />
+
+		Lista på användare i systemet <br />
     		<?php 
-		$currencies = User::join('creditlines', 'users.id', '=', 'creditlines.from' )
-			->select(DB::raw('count(*) as creditline_count, name, users.id'))
-                     	->groupBy('users.id')			
-			->where('privatperson', '=', '0')
-			->orderBy('creditline_count', 'desc')
-			->get();
+		$currencies = User::where('privatperson', '=', '1')->get();
 		
 		foreach ($currencies as $c){
 			$cstringusersearch = '/user/id/' . $c['id'];
-			echo HTML::link($cstringusersearch, $c['name'] . '(' . $c['creditline_count'] . ')'), '<br />';
+			$cstring = '/trust/' . $c['id'] . '/unit/1/amount/100';
+			echo HTML::link($cstringusersearch, $c['name']) . '<br />';
 		}
 
 ?>

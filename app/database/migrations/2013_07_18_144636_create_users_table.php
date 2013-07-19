@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('username', 128);
 			$table->string('password', 64);
 			$table->string('name', 128);
+			$table->string('desc', 255);
  			$table->boolean('privatperson');
         		$table->timestamps();
 		});

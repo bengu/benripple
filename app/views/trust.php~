@@ -47,20 +47,21 @@
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
-<?php echo HTML::link('/trust/1/unit/1/amount/100', '/trust/1/unit/1/amount/100'); ?>
-<?php echo HTML::link('/trust/2/unit/1/amount/100', '/trust/2/unit/1/amount/100'); ?>
+<?php echo HTML::link('hello', 'Hem'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
+
     <div class="welcome">
 	<div class="container">
  
 
 
 <form class="form-signin form-horizontal" method="post" action="/vtrust">
-<h2 class="">Var vänlig bekräfta att du vill kunna ta emot <?php echo $trust['amount'] ?> <?php echo $trustunitname ?> genom <?php echo $trustname ?></h2>
+<h2 class="">Bekräfta att du vill kunna ta emot <?php echo $trust['amount'] ?> <?php echo $trustunitname ?> av <?php echo $trustname ?></h2>
 
 <?php 
 $exists = Creditline::where('from', $trust['from'])->where('to', Auth::user()->id)->where('good_id', $trust['unit'])->select('trust')->get()->first();
 
-echo "Du har redan ", $exists['trust'] - $exists['balance'] ?>
+echo "Du har redan ", $exists['trust'] ?>
 
 <input type="hidden" id="amount" name="amount" value="<?php echo $trust['amount'] ?>">
 <input type="hidden" id="unit" name="unit" value="<?php echo $trust['unit'] ?>">
@@ -68,7 +69,7 @@ echo "Du har redan ", $exists['trust'] - $exists['balance'] ?>
 <button class="btn btn-large btn-primary" type="submit">Signera</button>
 </form>
 </div> <!-- /container -->
-    </div>
+</div>
 </body>
 </html>
 
