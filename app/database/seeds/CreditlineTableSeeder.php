@@ -21,7 +21,7 @@ class CreditlineTableSeeder extends Seeder {
 Creditline::create(array(
 		'from' => 1,
 		'to'  => 3,
-		'balance' => 1,
+		'balance' => 15,
 		'trust' => 25, 
 		'good_id' => 1
 ));

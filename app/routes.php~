@@ -72,7 +72,7 @@ Route::get('creditlines', function()
 ->join('users', 'creditlines.to', '=', 'users.id')
 ->join('goods', 'creditlines.good_id', '=', 'goods.id')
 ->where('creditlines.from', Auth::user()->id)
-->select(DB::raw('*, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as damoney'))
+->select(DB::raw('*, users.id as uid, COALESCE(dl.balance,0) + creditlines.trust - creditlines.balance as damoney'))
 ->get();
 
 $creditlines2 = DB::table('creditlines')
@@ -141,7 +141,7 @@ $response = DB::table('creditlines')->insertGetId(
 ));
 
 // we are now logged in, update database
-return Redirect::to('/');
+return Redirect::to('user/id/' . $userdata['from']);
 }));
 
 
@@ -169,7 +169,7 @@ Route::post('user', function()
 	$email = true;
 	if ($user){
 		
-		return Redirect::to('/user/email/' . $email);
+		return Redirect::to('/user/email/' . $user['email']);
 	}
 	else
 	return "hittade ej";
@@ -187,3 +187,50 @@ Route::get('user/email/{email?}', function($email = 'null')
 	return "hittade ej";
 });
 
+
+Route::post('promise', array('before' => 'auth' ,function()
+{
+
+$promise = array(
+	'promise'	=> Input::get('promise'),
+	'unit' 		=> Input::get('unit'),
+	'id' 		=> Input::get('id')
+);
+$good = Good::where('id', '=', $promise['unit'])->get()->first();
+$user = User::where('id', '=', $promise['id'])->get()->first();
+$promise['name'] = $user['name'];
+$promise['unitname'] = $good['description'];
+
+	return View::make('promise')->with('promise', $promise);
+}));
+
+
+Route::get('promise/{promise?}/unit/{unit?}/user/{id?}', array('before' => 'auth' ,function($promise = null, $unit = null,$id = null)
+{
+
+$promise = array(
+	'promise'	=> $promise,
+	'unit' 		=> $unit,
+	'id' 		=> $id
+);
+$good = Good::where('id', '=', $promise['unit'])->get()->first();
+$user = User::where('id', '=', $promise['id'])->get()->first();
+$promise['name'] = $user['name'];
+$promise['unitname'] = $good['description'];
+
+	return View::make('promise')->with('promise', $promise);
+
+}));
+
+Route::post('vpromise', array('before' => 'auth' ,function(){
+     $userdata = array(
+'promise' => Input::get('promise'),
+'unit' => Input::get('unit'),
+'id' => Input::get('id')
+);
+
+if ($userdata['id'] == Auth::user()->id){
+return "ej tillåtet";
+}
+return "det kommer snart kunna modifiera i databasen";
+}));

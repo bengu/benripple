@@ -61,9 +61,11 @@ echo 'Du kan utfärda till de som litar på valutan<br /><br />';}
 
 foreach ($creditlines as $cl)
 {
-	if($cl->damoney > 0 && $cl->privatperson)
-	echo "<b>", $cl->damoney, " ", $cl->description, "</b> till ", $cl->name, " <br />";
+	if($cl->damoney > 0 && $cl->privatperson){
+	$promisestring = '/promise/' . $cl->damoney . '/unit/1/user/' . $cl->uid ;
+	echo "<b>", HTML::link($promisestring, $cl->damoney . " " . $cl->description), "</b> till ", HTML::link('/user/id/' . $cl->uid, $cl->name), " <br />";
 	//var_dump($cl);
+}
 }?>
 
 

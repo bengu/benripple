@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Laravel PHP Framework</title>
     <style>
         @import url(//fonts.googleapis.com/css?family=Lato:300,400,700);
 
@@ -13,13 +14,13 @@
         }
 
         .welcome {
-           width: 300px;
-           height: 300px;
+           width: 400px;
+           height: 400px;
            position: absolute;
            left: 50%;
            top: 50%; 
-           margin-left: -150px;
-           margin-top: -150px;
+           margin-left: -200px;
+           margin-top: -200px;
         }
 
         a, a:visited {
@@ -43,36 +44,29 @@
     </style>
 </head>
 <body>
-<div class="header">
-Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
+<?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('creditlines', 'Kreditlinjer'); ?>
 <?php echo HTML::link('hello', 'Hem'); ?>
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
+
+    <div class="welcome">
+	<div class="container">
+ 
 
 
-</div>
-	<div class="welcome">
+<form class="form-signin form-horizontal" method="post" action="/vpromise">
+<h2 class="">Bekräfta att du vill skicka <?php echo $promise['promise'] ?> <?php echo $promise['unit'] ?> till <?php echo $promise['name'] ?></h2>
 
-<div class="container">
-<form class="form-signin form-horizontal" method="post" action="/user">
-<h2 class="">Sök användare med epostadress.</h2>
-<input type="text" id="email" name="email" value="">
-<br />
-<button class="btn btn-large btn-primary" type="submit">Sök med epostadress</button>
+
+<input type="hidden" id="promise" name="promise" value="<?php echo $promise['promise'] ?>">
+<input type="hidden" id="unit" name="unit" value="<?php echo $promise['unit'] ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $promise['id'] ?>">
+<button class="btn btn-large btn-primary" type="submit">Signera</button>
 </form>
 </div> <!-- /container -->
-<br /><br />
-
-		Lista på användare i systemet <br />
-    		<?php 
-		$currencies = User::where('privatperson', '=', '1')->get();
-		
-		foreach ($currencies as $c){
-			$cstringusersearch = '/user/id/' . $c['id'];
-			echo HTML::link($cstringusersearch, $c['name']) . '<br />';
-		}
-
-?>
-	</div>
+</div>
 </body>
 </html>
+
+

@@ -47,7 +47,7 @@
 <?php echo Auth::user()->username; ?> är inloggad.<br />
 <?php echo HTML::link('logout', 'Logout'); ?><br />
 <?php echo HTML::link('hello', 'Hem'); ?>
-
+<?php echo HTML::link('listusers', 'Lista användare'); ?>
 </div>
     <div class="welcome">
 <?php
@@ -61,9 +61,11 @@ echo 'Du kan utfärda till de som litar på valutan<br /><br />';}
 
 foreach ($creditlines as $cl)
 {
-	if($cl->damoney > 0 && $cl->privatperson)
-	echo "<b>", $cl->damoney, " ", $cl->description, "</b> till ", $cl->name, " <br />";
+	if($cl->damoney > 0 && $cl->privatperson){
+	$promisestring = '/promise/' . $cl->damoney . '/unit/1/user/' . $cl->id ;
+	echo "<b>", HTML::link($promisestring, $cl->damoney . " " . $cl->description), "</b> till ", HTML::link('/user/id/' . $cl->id, $cl->name), " <br />";
 	//var_dump($cl);
+}
 }?>
 
 

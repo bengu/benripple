@@ -72,7 +72,6 @@ Välkommen tillbaka, <?php echo Auth::user()->username; ?>!<br />
 		
 		foreach ($currencies as $c){
 			$cstringusersearch = '/user/id/' . $c['id'];
-			$cstring = '/trust/' . $c['id'] . '/unit/1/amount/100';
 			echo HTML::link($cstringusersearch, $c['name']) . '<br />';
 		}
 

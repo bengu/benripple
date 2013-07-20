@@ -64,18 +64,33 @@ echo 'E-postadressen ' . $user['email'] . ' tillhör ' . $user['name'] . '<br />
 
 $mystring = '/trust/' . $user['id'] . '/unit/1/amount/100';
 $myuserstring2 = 'Ge förtroende till ' . $user['name'] . ' för att kunna ta emot överföringar.';
-echo HTML::link($mystring, $myuserstring2); ?>
+if (Auth::user()->id != $user['id']){
+echo HTML::link($mystring, $myuserstring2);
 
-<?php 
 $exists = Creditline::join('goods', 'good_id', '=', 'goods.id')
 ->where('from', $user['id'])->where('to', Auth::user()->id)->get();
 
-echo "Du har redan uppgett att du litar på användaren motsvarande ";
 foreach ($exists as $ex)
 	{
-		echo '<br />' . $ex['trust'], ' ', $ex['description'], ' ' ;
+		echo '<br />' . $ex['trust'], ' ', $ex['description'], ' är satt som kreditgräns.' ;
 	}
+}
 ?>
+
+<br /><br />ovan kan också vara ett formulär. här nedan behöver en veta hur mycket som kan skickas. det behövs valm.jligheter för hur en vill skicka (direkt eller via någon)
+
+<div class="container">
+<form class="form-signin form-horizontal" method="post" action="/promise">
+<h2 class="">Skicka SEK till <?php echo $user['name']?></h2>
+<input type="hidden" id="id" name="id" value="<?php echo $user['id']?>">
+<input type="hidden" id="unit" name="unit" value="1">
+<input type="text" id="promise" name="promise" value="0">
+<br />
+<button class="btn btn-large btn-primary" type="submit">Skicka till <?php echo $user['name']?></button>
+</form>
+</div> <!-- /container -->
+<br /><br />
+
     </div>
 </body>
 </html>

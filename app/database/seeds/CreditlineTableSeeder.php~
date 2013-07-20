@@ -15,7 +15,7 @@ class CreditlineTableSeeder extends Seeder {
 		'private' => false,
 		'dividend' => false,
 		'balance' => 0,
-		'trust' => 11 
+		'trust' => 13
 ));
 
 Creditline::create(array(
